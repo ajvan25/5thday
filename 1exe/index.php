@@ -2,34 +2,33 @@
 //include "db_connect.php";
 require_once "db_connect.php";
 //echo "Retrieve the products";
-$sql = "SELECT * FROM `books`";
-//echo $sql;
-$result = mysqli_query($conn, $sql);
+$sql = "SELECT * FROM books";
+echo $sql;
+$result = mysqli_query($connect, $sql);
 //var_dump($result);
 $layout = '';
 if (mysqli_num_rows($result) > 0) {
     //fetch data
-    $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    foreach ($rows as $row) {
-
-        $layout .= "
-        <div>
-        <div class='card' my-3'>
-  <img src='{$row['picture']}' class='card-img-top' alt='{$row['title']}'>
-  <div class='card-body'>
-  
-    <h5 class='card-title'>{$row['title']}</h5>
-    <p class='card-text'>{$row['author']}</p>
-    <p class='card-text'>{$row['year']}</p>
-    <p class='card-text'>{$row['genre']}</p>
-    <a href='#' class='btn btn-primary'>Details</a>
-  </div>
-</div>
-
-
+    while ($row = mysqli_fetch_assoc($result)) {
+        $layout .= "<div>
+       
+        <div class='card'  style='width: 18rem;'>
+        <img src='{$row['picture']}' class='card-img-top' alt='...'>
+        <div class='card-body'>
+            <h5 class='card-title'>{$row['title']}</h5>
+            <p class='card-text'>{$row['author']}</p>
+            <p class='card-text'>{$row['year']}</p>
+            <p class='card-text'>{$row['genre']}</p>
+            <div>
+            
+            <a href='update.php?id={$row["book_id"]}' class='btn btn-primary'>Update</a>
+             <a href='delete.php?id={$row["book_id"]}' class='btn btn-danger'>Delete</a>
+             <a href='details.php?id={$row["book_id"]}' class='btn btn-primary'>Details</a>
+            
         </div>
-        
-        ";
+        </div>
+    </div>
+    ";
     }
     //$layout = 'We will fetch the datas in here';
 } else {
@@ -47,8 +46,10 @@ if (mysqli_num_rows($result) > 0) {
 </head>
 
 <body>
-    <div class="container">
-        <div class=" row-row cols-1 row-cols-md-2 row-cols-lg-3">
+    <div class="container mt-5">
+        <a href="create.php" class="btn btn-primary">Create new book</a>
+        <h1 class="my-3">Books List</h1>
+        <div class=" row-row cols-1 row-cols-md-2 my-8 row-cols-lg-3">
             <?= $layout ?>
         </div>
     </div>
